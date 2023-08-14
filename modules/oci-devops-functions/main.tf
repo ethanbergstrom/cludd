@@ -1,3 +1,12 @@
+resource "random_uuid" "stack_compartment_name" {
+}
+
+resource "oci_identity_compartment" "stack_compartment" {
+    compartment_id = var.compartment_ocid
+    name = random_uuid.stack_compartment_name.result
+    description = var.stack_compartment_description
+}
+
 resource "random_string" "topic_name" {
   length  = 10
   special = false
