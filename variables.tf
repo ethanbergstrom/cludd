@@ -17,5 +17,5 @@ variable "github_url" {
     default = "https://github.com/ethanbergstrom/munn.git"
 }
 
-variable "github_secret" {
+variable "github_token" {
 }
