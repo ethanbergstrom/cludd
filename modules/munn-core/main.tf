@@ -1,4 +1,3 @@
-# Fn - Requires NoSQL, Build pipeline
 resource "oci_core_vcn" "function_vcn" {
   compartment_id = var.compartment_ocid
   cidr_blocks = [var.vcn_cidr_block]

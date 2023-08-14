@@ -9,6 +9,3 @@ variable "subnet_id" {
 
 variable "image_uris" {
 }
-
-variable "database_name" {
-}
