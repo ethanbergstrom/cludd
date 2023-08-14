@@ -1,12 +1,11 @@
     schemaVersion: 1.0.0
     locale: en
-    title: Static Website Deployment Pipeline Stack
+    title: Cludd Stack
 
     variableGroups:
     - title: Infrastructure Configuration
       variables:
       - tenancy_ocid
-      - release
       - region
       - compartment_ocid
     - title: Source Configuration
