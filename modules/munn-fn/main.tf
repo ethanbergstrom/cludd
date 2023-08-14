@@ -235,3 +235,11 @@ resource "oci_identity_policy" "apiGatewayPolicy" {
     "Allow dynamic-group id ${oci_identity_dynamic_group.apiGatewayDynGroup.id} to use fn-invocation in compartment id ${var.compartment_ocid} where target.function.id = '${oci_functions_function.enviroRetrieve.id}'"
   ]
 }
+
+output "put_function_id" {
+  value = oci_functions_function.enviroStore.id
+}
+
+output "get_function_id" {
+  value = oci_functions_function.enviroRetrieve.id
+}
