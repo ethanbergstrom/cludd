@@ -64,7 +64,6 @@ resource oci_vault_secret githubSecret {
   }
 }
 
-# DevOps Build - requires Vault, Container Repo
 resource "random_string" "enviroStoreRepoName" {
   length  = 5
   numeric  = false
@@ -227,16 +226,10 @@ resource "oci_devops_build_run" "initial_build_run" {
   depends_on = [oci_logging_log.devopsLog,oci_devops_build_pipeline_stage.deliverArtifactStage,oci_identity_policy.devopsPolicy]
 }
 
-module "munn-core" {
-  source = "./modules/munn-core"
-  compartment_ocid = var.compartment_ocid
-}
-
 module "munn-fn" {
   source = "./modules/munn-fn"
   tenancy_ocid = var.tenancy_ocid
   compartment_ocid = var.compartment_ocid
-  subnet_id = module.munn-core.subnet_id
   image_uris = oci_devops_build_run.initial_build_run.build_outputs[0].delivered_artifacts[0]
 }
 
@@ -296,19 +289,4 @@ resource oci_devops_build_pipeline_stage buildTriggerDeployStage {
   deploy_pipeline_id = oci_devops_deploy_pipeline.deployPipeline.id
   display_name       = "Trigger Deployment"
   is_pass_all_parameters_enabled = "true"
-}
-
-module "sunn-iam" {
-  source = "./modules/sunn-iam"
-  tenancy_ocid = var.tenancy_ocid
-  compartment_ocid = oci_identity_compartment.stack_compartment.id
-  put_function_id = module.munn-fn.put_function_id
-}
-
-module "munn-api" {
-  source = "./modules/munn-api"
-  tenancy_ocid = var.tenancy_ocid
-  compartment_ocid = var.compartment_ocid
-  subnet_id = module.munn-core.subnet_id
-  get_function_id = module.munn-fn.get_function_id
 }
