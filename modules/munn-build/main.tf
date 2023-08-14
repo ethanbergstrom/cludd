@@ -196,17 +196,21 @@ resource "oci_devops_build_run" "initial_build_run" {
 }
 
 output "put_devops_artifact_id" {
-  value = oci_functions_function.enviroStore.id
+  value = oci_devops_deploy_artifact.EnviroStoreArtifact.id
 }
 
 output "get_devops_artifact_id" {
-  value = oci_functions_function.enviroRetrieve.id
+  value = oci_devops_deploy_artifact.EnviroRetrieveArtifact.id
 }
 
 output "build_pipeline_id" {
-  value = oci_functions_function.enviroStore.id
+  value = oci_devops_build_pipeline.buildPipeline.id
 }
 
 output "build_pipeline_deliver_stage_id" {
-  value = oci_functions_function.enviroRetrieve.id
+  value = oci_devops_build_pipeline_stage.deliverArtifactStage.id
+}
+
+output "image_urls" {
+  value = oci_devops_build_run.initial_build_run.build_outputs[0].delivered_artifacts[0]
 }

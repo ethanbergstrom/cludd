@@ -74,7 +74,7 @@ module "munn-fn" {
   tenancy_ocid = var.tenancy_ocid
   compartment_ocid = oci_identity_compartment.stack_compartment.id
   subnet_id = module.munn-core.subnet_id
-  image_uris = oci_devops_build_run.initial_build_run.build_outputs[0].delivered_artifacts[0]
+  image_uris = module.munn-build.image_urls
   database_name = random_string.database_name.result
 }
 
@@ -95,12 +95,13 @@ module "sunn-iam" {
   source = "./modules/sunn-iam"
   tenancy_ocid = var.tenancy_ocid
   compartment_ocid = oci_identity_compartment.stack_compartment.id
-  put_function_id = oci_functions_function.enviroStore.id
+  put_function_id = module.munn-fn.put_function_id
 }
 
 module "munn-api" {
   source = "./modules/munn-api"
+  tenancy_ocid = var.tenancy_ocid
   compartment_ocid = oci_identity_compartment.stack_compartment.id
   subnet_id = module.munn-core.subnet_id
-  get_function_id = oci_functions_function.enviroRetrieve.id
+  get_function_id = module.munn-fn.get_function_id
 }

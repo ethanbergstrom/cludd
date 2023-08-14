@@ -5,7 +5,7 @@ resource "random_uuid" "application_name" {
 resource "oci_functions_application" "function_application" {
   compartment_id = var.compartment_ocid
   display_name = random_uuid.application_name.result
-  subnet_ids = [oci_core_subnet.function_subnet.id]
+  subnet_ids = [var.subnet_id]
   # Set env vars for all functions
   config = {
     "TABLE_NAME" = var.database_name
