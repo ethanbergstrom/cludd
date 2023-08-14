@@ -12,7 +12,7 @@
     - title: Source Configuration
       variables:
       - github_url
-      - github_secret
+      - github_token
 
     variables:
 
