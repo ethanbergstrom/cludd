@@ -12,3 +12,10 @@ variable "compartment_ocid" {
 variable "stack_compartment_description" {
     default = "Cludd"
 }
+
+variable "github_url" {
+    default = "https://github.com/ethanbergstrom/munn.git"
+}
+
+variable "github_secret" {
+}

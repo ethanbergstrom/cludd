@@ -3,16 +3,16 @@
     title: Static Website Deployment Pipeline Stack
 
     variableGroups:
-    - title: Source Configuration
+    - title: Infrastructure Configuration
       variables:
       - tenancy_ocid
       - release
       - region
       - compartment_ocid
-    - title: Site Configuration
+    - title: Source Configuration
       variables:
-      - root_domain_name
-      - root_domain_ttl
+      - github_url
+      - github_secret
 
     variables:
 
@@ -23,18 +23,14 @@
         title: ${Messages.solutionsHub.solutions.stravaQuickstarts.variables.compartmentTitle()}
         description: ${Messages.solutionsHub.solutions.stravaQuickstarts.variables.compartmentDescription()}
 
-    outputs:
-
-      dashboard_url:
-        title: ${Messages.solutionsHub.solutions.stravaQuickstarts.outputs.dashboardUrlTitle()}
-        displayText: ${Messages.solutionsHub.solutions.stravaQuickstarts.outputs.dashboardUrlDisplayText()}
-        type: link
+      github_url:
+        type: string
+        required: true
         visible: true
+        title: GitHub repo URL for Function source code
 
-      adb_password:
-        title: ${Messages.solutionsHub.solutions.stravaQuickstarts.outputs.adbPasswordTitle()}
-        displayText: ${Messages.solutionsHub.solutions.stravaQuickstarts.outputs.adbPasswordTitle()}
+      github_token:
+        type: password
+        required: true
         visible: true
-        sensitive: true
-
-    primaryOutputButton: dashboard_url
+        title: GitHub personal access token with access to the GitHub repo
