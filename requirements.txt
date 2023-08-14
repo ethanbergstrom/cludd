@@ -1,7 +1,0 @@
-# Older crypto to work around Rust issue on ARM6 CPUs
-https://github.com/SickChill/SickChill/discussions/7684
-cryptography==3.4.8
-oci
-
-# Dont try to compile locally, it will take forever
---prefer-binary

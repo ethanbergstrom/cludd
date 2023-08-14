@@ -156,11 +156,11 @@ resource oci_devops_build_pipeline_stage deliverArtifactStage {
   deliver_artifact_collection {
     items {
       artifact_id   = oci_devops_deploy_artifact.EnviroStoreArtifact.id
-      artifact_name = "EnviroStoreOutput"
+      artifact_name = "munn-put-image"
     }
     items {
       artifact_id   = oci_devops_deploy_artifact.EnviroRetrieveArtifact.id
-      artifact_name = "EnviroRetrieveOutput"
+      artifact_name = "munn-get-image"
     }
   }
   display_name = "DeliverArtifact"

@@ -10,5 +10,5 @@ variable "compartment_ocid" {
 
 # Defaulted Variables
 variable "stack_compartment_description" {
-    default = "Enviro Stack"
+    default = "Cludd"
 }
