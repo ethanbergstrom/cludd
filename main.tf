@@ -162,7 +162,7 @@ resource oci_logging_log_group devops {
 }
 
 resource oci_logging_log devops {
-  display_name = "DevOpsLog"
+  display_name = "Operations"
   is_enabled         = "true"
   log_group_id       = oci_logging_log_group.devops.id
   log_type           = "SERVICE"

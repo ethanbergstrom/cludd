@@ -171,7 +171,7 @@ resource oci_apigateway_deployment base {
 
 resource oci_logging_log_group api {
   compartment_id = var.compartment_ocid
-  display_name = "API Gateway"
+  display_name = "APIGateway"
 }
 
 resource oci_logging_log api {
