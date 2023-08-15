@@ -130,7 +130,6 @@ resource oci_identity_policy put {
 
 resource oci_apigateway_gateway base {
   compartment_id = var.compartment_ocid
-  display_name  = "enviroGateway"
   endpoint_type = "PUBLIC"
   subnet_id = module.core.subnet_id
 }
