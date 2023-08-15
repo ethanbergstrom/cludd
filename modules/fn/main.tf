@@ -96,7 +96,6 @@ resource random_string put {
   upper = false
 }
 
-# Sunn access module - requires Fn
 resource oci_identity_user put {
   compartment_id = var.tenancy_ocid
   name           = random_string.put.result

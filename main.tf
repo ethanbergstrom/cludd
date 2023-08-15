@@ -157,11 +157,11 @@ resource oci_devops_build_pipeline_stage deliver {
   deliver_artifact_collection {
     items {
       artifact_id   = oci_devops_deploy_artifact.base["put"].id
-      artifact_name = "munn-put-image"
+      artifact_name = "put"
     }
     items {
       artifact_id   = oci_devops_deploy_artifact.base["get"].id
-      artifact_name = "munn-get-image"
+      artifact_name = "get"
     }
   }
 }
@@ -224,8 +224,8 @@ resource oci_devops_build_run base {
   depends_on = [oci_logging_log.devops,oci_devops_build_pipeline_stage.deliver,oci_identity_policy.devops]
 }
 
-module munn-fn {
-  source = "./modules/munn-fn"
+module fn {
+  source = "./modules/fn"
   tenancy_ocid = var.tenancy_ocid
   compartment_ocid = oci_identity_compartment.base.id
   image_uris = {
@@ -235,7 +235,7 @@ module munn-fn {
 }
 
 resource oci_devops_deploy_environment base {
-  for_each = module.munn-fn.function_ids
+  for_each = module.fn.function_ids
 
   deploy_environment_type = "FUNCTION"
   display_name            = each.key
