@@ -46,6 +46,7 @@ resource oci_logging_log fn {
   log_group_id       = oci_logging_log_group.fn.id
   log_type           = "SERVICE"
   retention_duration = "30"
+  display_name = "Invocations"
 }
 
 
@@ -141,7 +142,7 @@ resource oci_apigateway_deployment base {
   specification {
     routes {
       backend {
-        function_id = oci_functions_function.enviroRetrieve["get"].id
+        function_id = oci_functions_function.base["get"].id
         type = "ORACLE_FUNCTIONS_BACKEND"
       }
       methods = [
