@@ -226,7 +226,7 @@ module munn-fn {
   compartment_ocid = oci_identity_compartment.base.id
   image_uris = {
     # Use this loop (instead of the build run artifact URIs) to maintain the mapping of function name to image
-    for k, v in local.repo_uris : k => "${v}:${oci_devops_build_run.base.build_outputs[0].exported_variables[0].value}"
+    for k, v in local.repo_uris : k => "${v}:${oci_devops_build_run.base.build_outputs[0].exported_variables[0].items[0].value}"
   }
 }
 
