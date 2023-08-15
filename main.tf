@@ -264,17 +264,3 @@ resource oci_devops_build_pipeline_stage base {
   # Don't append the trigger step until the Deploy pipeline is fully built
   depends_on = [oci_devops_deploy_stage.base]
 }
-
-resource oci_devops_trigger base {
-	project_id = oci_devops_project.base.id
-	trigger_source = "GITHUB"
-  connection_id = oci_devops_connection.base.id
-
-	actions {
-		build_pipeline_id = oci_devops_build_pipeline.base.id
-		type = "TRIGGER_BUILD_PIPELINE"
-	}
-
-  # Don't append the trigger step until the pipeline is fully built
-  depends_on = [oci_devops_build_pipeline_stage.base]
-}
