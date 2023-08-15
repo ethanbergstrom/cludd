@@ -261,4 +261,6 @@ resource oci_devops_build_pipeline_stage trigger {
   build_pipeline_stage_type = "TRIGGER_DEPLOYMENT_PIPELINE"
   deploy_pipeline_id = oci_devops_deploy_pipeline.base.id
   is_pass_all_parameters_enabled = "true"
+  # Don't append the trigger step until the Deploy pipeline is fully built
+  depends_on = [oci_devops_deploy_stage.base]
 }
