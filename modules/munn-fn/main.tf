@@ -51,15 +51,11 @@ resource oci_logging_log fn {
 
 
 resource oci_functions_function base {
-  for_each = {
-    # I dont love this, and want to come back to it later
-    put = 0
-    get = 1
-  }
+  for_each = var.image_uris
   application_id = oci_functions_application.base.id
   display_name   = each.key
   memory_in_mbs  = "128"
-  image = var.image_uris.items[each.value].image_uri
+  image = each.value
   
   lifecycle {
     ignore_changes = [image,image_digest]

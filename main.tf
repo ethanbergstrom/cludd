@@ -84,8 +84,15 @@ resource oci_artifacts_container_repository base {
 
 data oci_objectstorage_namespace ns {}
 
+# Construct the image repo URL in a local variable so we can reuse it flexibly
+locals {
+  repo_uris = {
+    for k, v in oci_artifacts_container_repository.base : k => "${var.region}.ocir.io/${data.oci_objectstorage_namespace.ns.namespace}/${v.display_name}"
+  }
+}
+
 resource oci_devops_deploy_artifact base {
-  for_each = oci_artifacts_container_repository.base
+  for_each = local.repo_uris
 
   argument_substitution_mode = "SUBSTITUTE_PLACEHOLDERS"
   deploy_artifact_type = "DOCKER_IMAGE"
@@ -96,7 +103,7 @@ resource oci_devops_deploy_artifact base {
     deploy_artifact_source_type = "OCIR"
     image_digest = ""
     ## The $$ in Terraform will let us use ${imageVersion} as a literal string and wont try to interpolte it into a Terraform variable, so that OCI can use it as a variable
-    image_uri    = "${var.region}.ocir.io/${data.oci_objectstorage_namespace.ns.namespace}/${each.value.display_name}:$${imageVersion}"
+    image_uri    = "${each.value}:$${imageVersion}"
   }
 }
 
@@ -221,7 +228,10 @@ module munn-fn {
   source = "./modules/munn-fn"
   tenancy_ocid = var.tenancy_ocid
   compartment_ocid = oci_identity_compartment.base.id
-  image_uris = oci_devops_build_run.base.build_outputs[0].delivered_artifacts[0]
+  image_uris = {
+    # Use this loop (instead of the build run artifact URIs) to maintain the mapping of function name to image
+    for k, v in local.repo_uris : k => "${v}:${oci_devops_build_run.base.build_outputs[0].exported_variables[0].items[0].value}"
+  }
 }
 
 resource oci_devops_deploy_environment base {
