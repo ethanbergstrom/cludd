@@ -7,7 +7,7 @@ resource random_string base {
 
 resource oci_identity_compartment base {
   compartment_id = var.compartment_ocid
-  name = random_uuid.base.result
+  name = random_string.base.result
   description = var.stack_compartment_description
 }
 
@@ -227,11 +227,11 @@ resource oci_devops_deploy_environment base {
   deploy_environment_type = "FUNCTION"
   display_name            = each.key
   function_id = each.value
-  project_id = oci_devops_project.project.id
+  project_id = oci_devops_project.base.id
 }
 
 resource oci_devops_deploy_pipeline base {
-  project_id = oci_devops_project.project.id
+  project_id = oci_devops_project.base.id
 }
 
 resource oci_devops_deploy_stage base {
