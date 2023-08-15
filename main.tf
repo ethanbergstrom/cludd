@@ -52,6 +52,10 @@ resource oci_vault_secret base {
     content_type = "BASE64"
     content = base64encode(var.github_token)
   }
+  
+  lifecycle {
+    ignore_changes = [secret_content]
+  }
 }
 
 resource random_string put_repo {
