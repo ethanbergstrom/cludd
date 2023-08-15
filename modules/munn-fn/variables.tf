@@ -1,8 +1,12 @@
-variable "tenancy_ocid" {
+variable tenancy_ocid {
 }
 
-variable "compartment_ocid" {
+variable compartment_ocid {
 }
 
-variable "image_uris" {
+variable image_uris {
+}
+
+variable app_name {
+    default = "munn"
 }
