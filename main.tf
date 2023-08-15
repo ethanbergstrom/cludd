@@ -70,12 +70,12 @@ resource random_string get_repo {
 
 resource oci_artifacts_container_repository base {
   for_each = {
-    put = random_string.put_repo.result
-    get = random_string.get_repo.result
+    put = random_string.put_repo
+    get = random_string.get_repo
   }
 
   compartment_id = var.compartment_ocid
-  display_name   = each.value
+  display_name   = each.value.result
 }
 
 data oci_objectstorage_namespace ns {}
@@ -92,7 +92,7 @@ resource oci_devops_deploy_artifact base {
     deploy_artifact_source_type = "OCIR"
     image_digest = ""
     ## The $$ in Terraform will let us use ${imageVersion} as a literal string and wont try to interpolte it into a Terraform variable, so that OCI can use it as a variable
-    image_uri    = "${var.region}.ocir.io/${data.oci_objectstorage_namespace.ns.namespace}/${each.value}:$${imageVersion}"
+    image_uri    = "${var.region}.ocir.io/${data.oci_objectstorage_namespace.ns.namespace}/${each.value.display_name}:$${imageVersion}"
   }
 }
 
