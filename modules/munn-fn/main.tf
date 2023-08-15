@@ -1,5 +1,5 @@
 module core {
-  source = "./modules/munn-core"
+  source = "./modules/core"
   compartment_ocid = var.compartment_ocid
 }
 
