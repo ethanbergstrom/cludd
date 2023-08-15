@@ -278,3 +278,7 @@ resource oci_devops_trigger base {
   # Don't append the trigger step until the pipeline is fully built
   depends_on = [oci_devops_build_pipeline_stage.base]
 }
+
+output trigger_url {
+  value = oci_devops_trigger.base.trigger_url
+}

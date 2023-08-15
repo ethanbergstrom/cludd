@@ -40,3 +40,11 @@
         required: true
         visible: true
         title: GitHub personal access token with access to the repo
+
+    outputs:
+
+      trigger_url:
+        title: URL for use with GitHub web hooks
+        type: link
+        visible: true
+        sensitive: true
