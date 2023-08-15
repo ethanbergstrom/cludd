@@ -125,7 +125,7 @@ resource oci_devops_build_pipeline_stage build {
 
   build_source_collection {
     items {
-      branch          = "oci"
+      branch          = var.github_branch
       connection_id   = oci_devops_connection.base.id
       connection_type = "GITHUB"
       name            = "SourceRepo"
@@ -260,6 +260,5 @@ resource oci_devops_build_pipeline_stage trigger {
   }
   build_pipeline_stage_type = "TRIGGER_DEPLOYMENT_PIPELINE"
   deploy_pipeline_id = oci_devops_deploy_pipeline.base.id
-  display_name       = "Trigger Deployment"
   is_pass_all_parameters_enabled = "true"
 }

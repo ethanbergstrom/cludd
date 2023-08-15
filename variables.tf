@@ -17,6 +17,10 @@ variable "github_url" {
     default = "https://github.com/ethanbergstrom/munn.git"
 }
 
+variable "github_branch" {
+    default = "main"
+}
+
 # Required Variables
 variable "github_token" {
 }

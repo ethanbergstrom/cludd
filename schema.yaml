@@ -11,6 +11,7 @@
     - title: Source Configuration
       variables:
       - github_url
+      - github_branch
       - github_token
 
     variables:
@@ -28,8 +29,14 @@
         visible: true
         title: GitHub repo URL for Function source code
 
+      github_branch:
+        type: string
+        required: true
+        visible: true
+        title: Repo branch
+
       github_token:
         type: password
         required: true
         visible: true
-        title: GitHub personal access token with access to the GitHub repo
+        title: GitHub personal access token with access to the repo
