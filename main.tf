@@ -82,13 +82,13 @@ data oci_objectstorage_namespace ns {}
 
 # Construct the image repo URL in a local variable so we can reuse it flexibly
 locals {
-  image_uris = {
+  repo_uris = {
     for k, v in oci_artifacts_container_repository.base : k => "${var.region}.ocir.io/${data.oci_objectstorage_namespace.ns.namespace}/${v.display_name}"
   }
 }
 
 resource oci_devops_deploy_artifact base {
-  for_each = local.image_uris
+  for_each = local.repo_uris
 
   argument_substitution_mode = "SUBSTITUTE_PLACEHOLDERS"
   deploy_artifact_type = "DOCKER_IMAGE"
@@ -224,7 +224,10 @@ module munn-fn {
   source = "./modules/munn-fn"
   tenancy_ocid = var.tenancy_ocid
   compartment_ocid = oci_identity_compartment.base.id
-  image_uris = local.image_uris
+  image_uris = {
+    # Use this loop (instead of the build run artifact URIs) to maintain the mapping of function name to image
+    for k, v in local.repo_uris : k => "${v}:${oci_devops_build_run.base.build_outputs[0].exported_variables[0].value}"
+  }
 }
 
 resource oci_devops_deploy_environment base {
