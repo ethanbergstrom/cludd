@@ -12,12 +12,12 @@ resource oci_identity_compartment base {
 }
 
 resource oci_ons_notification_topic base {
-  compartment_id = oci_identity_compartment.base
+  compartment_id = oci_identity_compartment.base.id
   name = random_string.base.result
 }
 
 resource oci_devops_project base {
-  compartment_id = oci_identity_compartment.base
+  compartment_id = oci_identity_compartment.base.id
   name = random_string.base.result
 
   notification_config {
@@ -26,13 +26,13 @@ resource oci_devops_project base {
 }
 
 resource oci_kms_vault base {
-  compartment_id = oci_identity_compartment.base
+  compartment_id = oci_identity_compartment.base.id
   display_name = random_string.base.result
   vault_type = "DEFAULT"
 }
 
 resource oci_kms_key base {
-  compartment_id      = oci_identity_compartment.base
+  compartment_id      = oci_identity_compartment.base.id
   display_name = random_string.base.result
   management_endpoint = oci_kms_vault.base.management_endpoint
 
@@ -43,7 +43,7 @@ resource oci_kms_key base {
 }
 
 resource oci_vault_secret base {
-  compartment_id = oci_identity_compartment.base
+  compartment_id = oci_identity_compartment.base.id
   key_id = oci_kms_key.base.id
   secret_name    = random_string.base.result
   vault_id       = oci_kms_vault.base.id
@@ -74,7 +74,7 @@ resource oci_artifacts_container_repository base {
     get = random_string.get_repo
   }
 
-  compartment_id = oci_identity_compartment.base
+  compartment_id = oci_identity_compartment.base.id
   display_name   = each.value.result
 }
 
@@ -157,7 +157,7 @@ resource oci_devops_build_pipeline_stage deliver {
 }
 
 resource oci_logging_log_group devops {
-  compartment_id = oci_identity_compartment.base
+  compartment_id = oci_identity_compartment.base.id
   display_name = "DevOps"
 }
 
@@ -189,21 +189,21 @@ resource oci_identity_dynamic_group devops {
   compartment_id = var.tenancy_ocid
   name           = random_string.devops.result
   description    = "DevOps resource identities"
-  matching_rule = "All {resource.compartment.id = '${oci_identity_compartment.base}', Any {resource.type = 'devopsdeploypipeline', resource.type = 'devopsbuildpipeline', resource.type = 'devopsrepository', resource.type = 'devopsconnection', resource.type = 'devopstrigger'}}"
+  matching_rule = "All {resource.compartment.id = '${oci_identity_compartment.base.id}', Any {resource.type = 'devopsdeploypipeline', resource.type = 'devopsbuildpipeline', resource.type = 'devopsrepository', resource.type = 'devopsconnection', resource.type = 'devopstrigger'}}"
 }
 
 resource oci_identity_policy devops {
-  compartment_id = oci_identity_compartment.base
+  compartment_id = oci_identity_compartment.base.id
   name           = random_string.devops.result
   description    = "DevOps to complete its pipeline steps"
 
   statements = [
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage devops-family in compartment id ${oci_identity_compartment.base}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage functions-family in compartment id ${oci_identity_compartment.base}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage generic-artifacts in compartment id ${oci_identity_compartment.base}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage repos in compartment id ${oci_identity_compartment.base}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to use ons-topics in compartment id ${oci_identity_compartment.base}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to read secret-family in compartment id ${oci_identity_compartment.base}",
+    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage devops-family in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage functions-family in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage generic-artifacts in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage repos in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to use ons-topics in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to read secret-family in compartment id ${oci_identity_compartment.base.id}",
   ]
 }
 
@@ -217,7 +217,7 @@ resource oci_devops_build_run base {
 module munn-fn {
   source = "./modules/munn-fn"
   tenancy_ocid = var.tenancy_ocid
-  compartment_ocid = oci_identity_compartment.base
+  compartment_ocid = oci_identity_compartment.base.id
   image_uris = oci_devops_build_run.base.build_outputs[0].delivered_artifacts[0]
 }
 
