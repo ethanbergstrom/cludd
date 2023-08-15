@@ -101,10 +101,9 @@ resource oci_devops_build_pipeline base {
 }
 
 resource oci_devops_connection base {
+  project_id = oci_devops_project.base.id
   access_token = oci_vault_secret.base.id
   connection_type = "GITHUB_ACCESS_TOKEN"
-  display_name = "GitHub"
-  project_id = oci_devops_project.base.id
 }
 
 resource oci_devops_build_pipeline_stage build {
@@ -251,16 +250,31 @@ resource oci_devops_deploy_stage base {
 }
 
 # Append the Triger Deploy build step to the Build pipeline
-resource oci_devops_build_pipeline_stage trigger {
+resource oci_devops_build_pipeline_stage base {
   build_pipeline_id = oci_devops_build_pipeline.base.id
+  build_pipeline_stage_type = "TRIGGER_DEPLOYMENT_PIPELINE"
+  deploy_pipeline_id = oci_devops_deploy_pipeline.base.id
+  is_pass_all_parameters_enabled = "true"
+  
   build_pipeline_stage_predecessor_collection {
     items {
       id = oci_devops_build_pipeline_stage.deliver.id
     }
   }
-  build_pipeline_stage_type = "TRIGGER_DEPLOYMENT_PIPELINE"
-  deploy_pipeline_id = oci_devops_deploy_pipeline.base.id
-  is_pass_all_parameters_enabled = "true"
   # Don't append the trigger step until the Deploy pipeline is fully built
   depends_on = [oci_devops_deploy_stage.base]
+}
+
+resource oci_devops_trigger base {
+	project_id = oci_devops_project.base.id
+	trigger_source = "GITHUB"
+  connection_id = oci_devops_connection.base.id
+
+	actions {
+		build_pipeline_id = oci_devops_build_pipeline.base.id
+		type = "TRIGGER_BUILD_PIPELINE"
+	}
+
+  # Don't append the trigger step until the pipeline is fully built
+  depends_on = [oci_devops_build_pipeline_stage.base]
 }
