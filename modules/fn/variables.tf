@@ -8,5 +8,5 @@ variable image_uris {
 }
 
 variable app_name {
-    default = "munn"
+  default = "munn"
 }

@@ -10,15 +10,15 @@ variable "compartment_ocid" {
 
 # Defaulted Variables
 variable "stack_compartment_description" {
-    default = "Cludd"
+  default = "Cludd"
 }
 
 variable "github_url" {
-    default = "https://github.com/ethanbergstrom/munn.git"
+  default = "https://github.com/ethanbergstrom/munn.git"
 }
 
 variable "github_branch" {
-    default = "main"
+  default = "main"
 }
 
 # Required Variables

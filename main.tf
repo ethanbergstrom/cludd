@@ -60,17 +60,17 @@ resource oci_vault_secret base {
 }
 
 resource random_string put_repo {
-  length   = 5
-  numeric  = false
-  special  = false
-  upper    = false
+  length  = 5
+  numeric = false
+  special = false
+  upper   = false
 }
 
 resource random_string get_repo {
-  length   = 5
-  numeric  = false
-  special  = false
-  upper    = false
+  length  = 5
+  numeric = false
+  special = false
+  upper   = false
 }
 
 resource oci_artifacts_container_repository base {
@@ -190,10 +190,10 @@ resource oci_logging_log devops {
 }
 
 resource random_string devops {
-  length   = 5
-  numeric  = false
-  special  = false
-  upper    = false
+  length  = 5
+  numeric = false
+  special = false
+  upper   = false
 }
 
 resource oci_identity_dynamic_group devops {
