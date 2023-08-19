@@ -229,8 +229,8 @@ resource oci_devops_build_run base {
 }
 
 module fn {
-  source = "./modules/fn"
-  tenancy_ocid = var.tenancy_ocid
+  source           = "./modules/fn"
+  tenancy_ocid     = var.tenancy_ocid
   compartment_ocid = oci_identity_compartment.base.id
   image_uris       = {
     # Use this loop (instead of the build run artifact URIs) to maintain the mapping of function name to image
@@ -273,13 +273,12 @@ resource oci_devops_build_pipeline_stage base {
   build_pipeline_stage_type      = "TRIGGER_DEPLOYMENT_PIPELINE"
   deploy_pipeline_id             = oci_devops_deploy_pipeline.base.id
   is_pass_all_parameters_enabled = "true"
+  # Don't append the trigger step until the Deploy pipeline is fully built
+  depends_on = [oci_devops_deploy_stage.base]
   
   build_pipeline_stage_predecessor_collection {
     items {
       id = oci_devops_build_pipeline_stage.deliver.id
     }
   }
-
-  # Don't append the trigger step until the Deploy pipeline is fully built
-  depends_on = [oci_devops_deploy_stage.base]
 }
