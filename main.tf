@@ -223,7 +223,7 @@ resource oci_devops_build_run base {
   # Ensure it runs after DeliverArtifact stage is in place, Logging is enabled, and necessarily permissions are granted
   depends_on        = [
     oci_logging_log.devops,
-    ci_devops_build_pipeline_stage.deliver,
+    oci_devops_build_pipeline_stage.deliver,
     oci_identity_policy.devops
   ]
 }
