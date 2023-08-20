@@ -32,8 +32,8 @@ resource oci_core_security_list https {
   }
 
   ingress_security_rules {
-    protocol = "6"
     source   = "0.0.0.0/0"
+    protocol = "6"
 
     tcp_options {
       max = "443"
