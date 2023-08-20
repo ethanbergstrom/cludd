@@ -17,8 +17,8 @@ resource oci_core_default_route_table base {
   manage_default_resource_id = oci_core_vcn.base.default_route_table_id
 
   route_rules {
-	  destination       = "0.0.0.0/0"
-	  network_entity_id = oci_core_internet_gateway.base.id
+    destination       = "0.0.0.0/0"
+    network_entity_id = oci_core_internet_gateway.base.id
   }
 }
 
@@ -30,6 +30,7 @@ resource oci_core_security_list https {
     destination = "0.0.0.0/0"
     protocol    = "6"
   }
+
   ingress_security_rules {
     protocol = "6"
     source   = "0.0.0.0/0"
