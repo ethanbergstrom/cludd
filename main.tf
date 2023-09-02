@@ -31,10 +31,17 @@ resource oci_kms_vault base {
   vault_type     = "DEFAULT"
 }
 
+resource "time_sleep" "vault_dns_propagate" {
+  # Workaround for https://github.com/oracle/terraform-provider-oci/issues/1955 in PHX
+  create_duration = "3m"
+  depends_on = [oci_kms_vault.base]
+}
+
 resource oci_kms_key base {
   compartment_id      = oci_identity_compartment.base.id
   display_name        = random_string.base.result
   management_endpoint = oci_kms_vault.base.management_endpoint
+  depends_on = [time_sleep.vault_dns_propagate]
 
   key_shape {
     algorithm = "AES"
@@ -229,10 +236,11 @@ resource oci_devops_build_run base {
 }
 
 module fn {
-  source           = "./modules/fn"
-  tenancy_ocid     = var.tenancy_ocid
-  compartment_ocid = oci_identity_compartment.base.id
-  image_uris       = {
+  source            = "./modules/fn"
+  tenancy_ocid      = var.tenancy_ocid
+  compartment_ocid  = oci_identity_compartment.base.id
+  current_user_ocid = var.current_user_ocid
+  image_uris        = {
     # Use this loop (instead of the build run artifact URIs) to maintain the mapping of function name to image
     for k, v in local.repo_uris : k => "${v}:${oci_devops_build_run.base.build_outputs[0].exported_variables[0].items[0].value}"
   }
