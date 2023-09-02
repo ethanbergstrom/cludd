@@ -33,7 +33,7 @@ resource oci_kms_vault base {
 
 resource "time_sleep" "vault_dns_propagate" {
   # Workaround for https://github.com/oracle/terraform-provider-oci/issues/1955 in PHX
-  create_duration = "30s"
+  create_duration = "3m"
   depends_on = [oci_kms_vault.base]
 }
 
