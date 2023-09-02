@@ -74,9 +74,10 @@ resource random_string fn_nosql {
   upper    = false
 }
 
-resource oci_identity_dynamic_group fn_nosql {
+resource oci_identity_domains_dynamic_resource_group fn_nosql {
   compartment_id = var.tenancy_ocid
-  name           = random_string.fn_nosql.result
+  idcs_endpoint  = var.idcs_endpoint
+  display_name   = random_string.fn_nosql.result
   description    = "Function resource identities"
   matching_rule  = "All {resource.compartment.id = '${var.compartment_ocid}', resource.type = 'fnfunc'}}"
 }
@@ -86,7 +87,7 @@ resource oci_identity_policy fn_nosql {
   name           = random_string.fn_nosql.result
   description    = "Functions to insert NoSQL database rows"
   statements     = [
-    "Allow dynamic-group id ${oci_identity_dynamic_group.fn_nosql.id} to use nosql-rows in compartment id ${var.compartment_ocid}"
+    "Allow dynamic-group id ${oci_identity_domains_dynamic_resource_group.fn_nosql.id} to use nosql-rows in compartment id ${var.compartment_ocid}"
   ]
 }
 
@@ -97,21 +98,21 @@ resource random_string put {
   upper    = false
 }
 
-resource oci_identity_user put {
-  compartment_id = var.tenancy_ocid
-  name           = random_string.put.result
-  description    = "Invoke a 'put' Function"
+resource oci_identity_domains_group put {
+  idcs_endpoint = var.idcs_endpoint
+  display_name  = random_string.put.result
+  description   = "Invoke a 'put' Function"
 }
 
-resource oci_identity_group put {
-  compartment_id = var.tenancy_ocid
-  name           = random_string.put.result
-  description    = "Invoke a 'put' Function"
-}
+resource oci_identity_domains_user put {
+  idcs_endpoint = var.idcs_endpoint
+  user_name     = random_string.put.result
+  description   = "Invoke a 'put' Function"
+  groups        = [oci_identity_domains_group.put.id]
 
-resource oci_identity_user_group_membership put {
-  group_id = oci_identity_group.put.id
-  user_id  = oci_identity_user.put.id
+	name {
+		family_name = andom_string.put.result
+	}
 }
 
 resource oci_identity_policy put {
@@ -119,7 +120,7 @@ resource oci_identity_policy put {
   description    = "Invoke a 'put' Function"
   compartment_id = var.compartment_ocid
   statements     = [
-    "Allow group id ${oci_identity_group.put.id} to use fn-invocation in compartment id ${var.compartment_ocid} where target.function.id = '${oci_functions_function.base["put"].id}'"
+    "Allow group id ${oci_identity_domains_group.put.id} to use fn-invocation in compartment id ${var.compartment_ocid} where target.function.id = '${oci_functions_function.base["put"].id}'"
   ]
 }
 
@@ -196,11 +197,11 @@ resource random_string api_fn {
   upper    = false
 }
 
-resource oci_identity_dynamic_group api_fn {
-  compartment_id = var.tenancy_ocid
-  name           = random_string.api_fn.result
-  description    = "API Gateway resource identities"
-  matching_rule  = "All {resource.compartment.id = '${var.compartment_ocid}', resource.type = 'apigateway'}"
+resource oci_identity_domains_dynamic_resource_group api_fn {
+  idcs_endpoint = var.idcs_endpoint
+  name          = random_string.api_fn.result
+  description   = "API Gateway resource identities"
+  matching_rule = "All {resource.compartment.id = '${var.compartment_ocid}', resource.type = 'apigateway'}"
 }
 
 resource oci_identity_policy api_fn {
@@ -208,7 +209,7 @@ resource oci_identity_policy api_fn {
   name           = random_string.api_fn.result
   description    = "Provide the necessary permissions for API Gateways to invoke a Function"
   statements     = [
-    "Allow dynamic-group id ${oci_identity_dynamic_group.api_fn.id} to use fn-invocation in compartment id ${var.compartment_ocid} where target.function.id = '${oci_functions_function.base["get"].id}'"
+    "Allow dynamic-group id ${oci_identity_domains_dynamic_resource_group.api_fn.id} to use fn-invocation in compartment id ${var.compartment_ocid} where target.function.id = '${oci_functions_function.base["get"].id}'"
   ]
 }
 

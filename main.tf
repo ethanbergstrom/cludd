@@ -11,6 +11,16 @@ resource oci_identity_compartment base {
   description    = var.stack_compartment_description
 }
 
+resource oci_identity_domain base {
+  compartment_id            = var.compartment_ocid
+  display_name              = random_string.base.result
+  description               = var.stack_compartment_description
+  home_region               = var.region
+  license_type              = "free"
+  is_hidden_on_login        = true
+  is_primary_email_required = false
+}
+
 resource oci_ons_notification_topic base {
   compartment_id = oci_identity_compartment.base.id
   name           = random_string.base.result
@@ -196,11 +206,11 @@ resource random_string devops {
   upper   = false
 }
 
-resource oci_identity_dynamic_group devops {
-  compartment_id = var.tenancy_ocid
-  name           = random_string.devops.result
-  description    = "DevOps resource identities"
-  matching_rule  = "All {resource.compartment.id = '${oci_identity_compartment.base.id}', Any {resource.type = 'devopsdeploypipeline', resource.type = 'devopsbuildpipeline', resource.type = 'devopsrepository', resource.type = 'devopsconnection', resource.type = 'devopstrigger'}}"
+resource oci_identity_domains_dynamic_resource_group devops {
+  display_name  = random_string.devops.result
+  idcs_endpoint = oci_identity_domain.base.url
+  description   = "DevOps resource identities"
+  matching_rule = "All {resource.compartment.id = '${oci_identity_compartment.base.id}', Any {resource.type = 'devopsdeploypipeline', resource.type = 'devopsbuildpipeline', resource.type = 'devopsrepository', resource.type = 'devopsconnection', resource.type = 'devopstrigger'}}"
 }
 
 resource oci_identity_policy devops {
@@ -208,12 +218,12 @@ resource oci_identity_policy devops {
   name           = random_string.devops.result
   description    = "DevOps to complete its pipeline steps"
   statements     = [
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage devops-family in compartment id ${oci_identity_compartment.base.id}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage functions-family in compartment id ${oci_identity_compartment.base.id}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage generic-artifacts in compartment id ${oci_identity_compartment.base.id}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to manage repos in compartment id ${oci_identity_compartment.base.id}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to use ons-topics in compartment id ${oci_identity_compartment.base.id}",
-    "Allow dynamic-group id ${oci_identity_dynamic_group.devops.id} to read secret-family in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_domains_dynamic_resource_group.devops.id} to manage devops-family in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_domains_dynamic_resource_group.devops.id} to manage functions-family in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_domains_dynamic_resource_group.devops.id} to manage generic-artifacts in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_domains_dynamic_resource_group.devops.id} to manage repos in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_domains_dynamic_resource_group.devops.id} to use ons-topics in compartment id ${oci_identity_compartment.base.id}",
+    "Allow dynamic-group id ${oci_identity_domains_dynamic_resource_group.devops.id} to read secret-family in compartment id ${oci_identity_compartment.base.id}",
   ]
 }
 
@@ -232,6 +242,7 @@ module fn {
   source           = "./modules/fn"
   tenancy_ocid     = var.tenancy_ocid
   compartment_ocid = oci_identity_compartment.base.id
+  idcs_endpoint    = oci_identity_domain.base.url
   image_uris       = {
     # Use this loop (instead of the build run artifact URIs) to maintain the mapping of function name to image
     for k, v in local.repo_uris : k => "${v}:${oci_devops_build_run.base.build_outputs[0].exported_variables[0].items[0].value}"
