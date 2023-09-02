@@ -97,10 +97,16 @@ resource random_string put {
   upper    = false
 }
 
+data oci_identity_user admin {
+  user_id = var.current_user_ocid
+}
+
 resource oci_identity_user put {
   compartment_id = var.tenancy_ocid
   name           = random_string.put.result
   description    = "Invoke a 'put' Function"
+  # Copy the recovery address of the stack admin to the service account user, since it's required with identity domains
+  email          = data.oci_identity_user.admin.email
 }
 
 resource oci_identity_group put {

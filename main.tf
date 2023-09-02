@@ -229,10 +229,11 @@ resource oci_devops_build_run base {
 }
 
 module fn {
-  source           = "./modules/fn"
-  tenancy_ocid     = var.tenancy_ocid
-  compartment_ocid = oci_identity_compartment.base.id
-  image_uris       = {
+  source            = "./modules/fn"
+  tenancy_ocid      = var.tenancy_ocid
+  compartment_ocid  = oci_identity_compartment.base.id
+  current_user_ocid = var.current_user_ocid
+  image_uris        = {
     # Use this loop (instead of the build run artifact URIs) to maintain the mapping of function name to image
     for k, v in local.repo_uris : k => "${v}:${oci_devops_build_run.base.build_outputs[0].exported_variables[0].items[0].value}"
   }
