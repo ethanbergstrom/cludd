@@ -112,7 +112,7 @@ resource oci_identity_domains_user put {
 	schemas       = ["urn:ietf:params:scim:schemas:core:2.0:User"]
 
 	name {
-		family_name = andom_string.put.result
+		family_name = random_string.put.result
 	}
 }
 
