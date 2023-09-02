@@ -207,9 +207,10 @@ resource random_string devops {
 }
 
 resource oci_identity_domains_dynamic_resource_group devops {
-  display_name  = random_string.devops.result
   idcs_endpoint = oci_identity_domain.base.url
+  display_name  = random_string.devops.result
   description   = "DevOps resource identities"
+	schemas       = ["urn:ietf:params:scim:schemas:oracle:idcs:DynamicResourceGroup"]
   matching_rule = "All {resource.compartment.id = '${oci_identity_compartment.base.id}', Any {resource.type = 'devopsdeploypipeline', resource.type = 'devopsbuildpipeline', resource.type = 'devopsrepository', resource.type = 'devopsconnection', resource.type = 'devopstrigger'}}"
 }
 

@@ -75,11 +75,11 @@ resource random_string fn_nosql {
 }
 
 resource oci_identity_domains_dynamic_resource_group fn_nosql {
-  compartment_id = var.tenancy_ocid
-  idcs_endpoint  = var.idcs_endpoint
-  display_name   = random_string.fn_nosql.result
-  description    = "Function resource identities"
-  matching_rule  = "All {resource.compartment.id = '${var.compartment_ocid}', resource.type = 'fnfunc'}}"
+  idcs_endpoint = var.idcs_endpoint
+  display_name  = random_string.fn_nosql.result
+  description   = "Function resource identities"
+	schemas       = ["urn:ietf:params:scim:schemas:oracle:idcs:DynamicResourceGroup"]
+  matching_rule = "All {resource.compartment.id = '${var.compartment_ocid}', resource.type = 'fnfunc'}}"
 }
 
 resource oci_identity_policy fn_nosql {
@@ -101,7 +101,7 @@ resource random_string put {
 resource oci_identity_domains_group put {
   idcs_endpoint = var.idcs_endpoint
   display_name  = random_string.put.result
-  description   = "Invoke a 'put' Function"
+	schemas       = ["urn:ietf:params:scim:schemas:core:2.0:Group"]
 }
 
 resource oci_identity_domains_user put {
@@ -109,6 +109,7 @@ resource oci_identity_domains_user put {
   user_name     = random_string.put.result
   description   = "Invoke a 'put' Function"
   groups        = [oci_identity_domains_group.put.id]
+	schemas       = ["urn:ietf:params:scim:schemas:core:2.0:User"]
 
 	name {
 		family_name = andom_string.put.result
@@ -199,8 +200,9 @@ resource random_string api_fn {
 
 resource oci_identity_domains_dynamic_resource_group api_fn {
   idcs_endpoint = var.idcs_endpoint
-  name          = random_string.api_fn.result
+  display_name  = random_string.api_fn.result
   description   = "API Gateway resource identities"
+	schemas       = ["urn:ietf:params:scim:schemas:oracle:idcs:DynamicResourceGroup"]
   matching_rule = "All {resource.compartment.id = '${var.compartment_ocid}', resource.type = 'apigateway'}"
 }
 
