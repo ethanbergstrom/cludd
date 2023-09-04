@@ -236,7 +236,7 @@ resource oci_devops_build_run base {
   
   lifecycle {
     ignore_changes = [
-      id
+      build_run_progress
     ]
   }
 }
