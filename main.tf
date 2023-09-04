@@ -233,12 +233,6 @@ resource oci_devops_build_run base {
     oci_devops_build_pipeline_stage.deliver,
     oci_identity_policy.devops
   ]
-  
-  lifecycle {
-    ignore_changes = [
-      build_run_progress
-    ]
-  }
 }
 
 module fn {
