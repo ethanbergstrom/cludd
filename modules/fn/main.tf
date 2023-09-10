@@ -154,6 +154,7 @@ resource oci_apigateway_deployment base {
       path    = "/get"
       methods = [
         "POST",
+        "GET"
       ]
       
       backend {
@@ -225,6 +226,17 @@ resource oci_identity_policy api_fn {
   statements     = [
     "Allow dynamic-group id ${oci_identity_dynamic_group.api_fn.id} to use fn-invocation in compartment id ${var.compartment_ocid} where target.function.id = '${oci_functions_function.base["get"].id}'"
   ]
+}
+
+resource oci_health_checks_http_probe base {
+    #Required
+    compartment_id = var.compartment_ocid
+    protocol = "HTTPS"
+    targets = [
+      oci_apigateway_gateway.base.hostname
+    ]
+    path = oci_apigateway_deployment.base.specification[0].routes[0].path
+    method = "GET"
 }
 
 output "function_ids" {
