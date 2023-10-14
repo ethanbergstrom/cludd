@@ -94,9 +94,9 @@ resource oci_identity_dynamic_group fn_nosql {
 resource oci_identity_policy fn_nosql {
   compartment_id = var.compartment_ocid
   name           = random_string.fn_nosql.result
-  description    = "Functions to insert NoSQL database rows"
+  description    = "Functions to manipulate NoSQL database rows"
   statements     = [
-    "Allow dynamic-group id ${oci_identity_dynamic_group.fn_nosql.id} to use nosql-rows in compartment id ${var.compartment_ocid} where target.nosql-table.id = ${oci_nosql_table.base.id}"
+    "Allow dynamic-group id ${oci_identity_dynamic_group.fn_nosql.id} to use nosql-rows in compartment id ${var.compartment_ocid} where target.nosql-table.name = '${oci_nosql_table.base.name}'"
   ]
 }
 
