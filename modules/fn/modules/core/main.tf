@@ -8,6 +8,21 @@ resource oci_core_network_security_group base {
   vcn_id         = oci_core_vcn.base.id
 }
 
+resource oci_core_network_security_group_security_rule base {
+  network_security_group_id = oci_core_network_security_group.base.id
+  direction                 = "INGRESS"
+  protocol                  = 6
+  source_type               = "CIDR_BLOCK"
+  source                    = "0.0.0.0/0"
+
+  tcp_options {
+    destination_port_range {
+      min = 443
+      max = 443
+    }
+  }
+}
+
 resource oci_core_internet_gateway base {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.base.id
@@ -54,4 +69,8 @@ resource oci_core_subnet base {
 
 output subnet_id {
   value = oci_core_subnet.base.id
+}
+
+output nsg_id {
+  value = oci_core_network_security_group.base.id
 }

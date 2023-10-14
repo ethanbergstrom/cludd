@@ -28,9 +28,10 @@ resource oci_nosql_index base {
 }
 
 resource oci_functions_application base {
-  compartment_id = var.compartment_ocid
-  display_name   = var.app_name
-  subnet_ids     = [module.core.subnet_id]
+  compartment_id             = var.compartment_ocid
+  display_name               = var.app_name
+  subnet_ids                 = [module.core.subnet_id]
+  network_security_group_ids = [module.core.nsg_id]
   # Set env vars for all functions
   config         = {
     "TABLE_NAME"       = var.app_name
