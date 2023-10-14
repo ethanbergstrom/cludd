@@ -143,6 +143,7 @@ resource oci_apigateway_gateway base {
   compartment_id = var.compartment_ocid
   endpoint_type  = "PUBLIC"
   subnet_id      = module.core.subnet_id
+  network_security_group_ids = [module.core.nsg_id]
 }
 
 resource oci_apigateway_deployment base {
