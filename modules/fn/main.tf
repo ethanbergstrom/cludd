@@ -240,18 +240,18 @@ resource oci_health_checks_http_probe base {
     path = oci_apigateway_deployment.base.specification[0].routes[0].path
 }
 
-resource oci_health_checks_http_monitor base {
-    compartment_id = var.compartment_ocid
-    display_name = "get"
-    interval_in_seconds = 60
-    protocol = "HTTPS"
-    method = "GET"
-    targets = [
-      oci_apigateway_gateway.base.hostname
-    ]
-    path = oci_apigateway_deployment.base.specification[0].routes[0].path
-    depends_on = [oci_health_checks_http_probe.base]
-}
+# resource oci_health_checks_http_monitor base {
+#     compartment_id = var.compartment_ocid
+#     display_name = "get"
+#     interval_in_seconds = 60
+#     protocol = "HTTPS"
+#     method = "GET"
+#     targets = [
+#       oci_apigateway_gateway.base.hostname
+#     ]
+#     path = oci_apigateway_deployment.base.specification[0].routes[0].path
+#     depends_on = [oci_health_checks_http_probe.base]
+# }
 
 output "function_ids" {
   value = {
