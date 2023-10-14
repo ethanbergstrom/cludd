@@ -88,7 +88,7 @@ resource oci_identity_dynamic_group fn_nosql {
   compartment_id = var.tenancy_ocid
   name           = random_string.fn_nosql.result
   description    = "Function resource identities"
-  matching_rule  = "All {resource.compartment.id = '${var.compartment_ocid}', resource.type = 'fnfunc'}}"
+  matching_rule  = "All {resource.compartment.id = '${var.compartment_ocid}', resource.type = 'fnfunc'}"
 }
 
 resource oci_identity_policy fn_nosql {
