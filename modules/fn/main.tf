@@ -149,7 +149,7 @@ resource oci_apigateway_gateway base {
 resource oci_apigateway_deployment base {
   compartment_id = var.compartment_ocid
   gateway_id     = oci_apigateway_gateway.base.id
-  path_prefix    = "/"
+  path_prefix    = "/${var.app_name}"
 
   specification {
     routes {
